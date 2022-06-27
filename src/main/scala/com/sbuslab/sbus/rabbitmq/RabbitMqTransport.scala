@@ -1,12 +1,13 @@
 package com.sbuslab.sbus.rabbitmq
 
+import java.io.FileInputStream
+import java.security.KeyStore
 import java.util
 import java.util.UUID
 import java.util.concurrent._
 import scala.collection.JavaConverters._
-import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
-import scala.util.{Failure, Success}
+import scala.concurrent.{Await, Future}
 
 import akka.actor.{ActorRef, ActorSystem, Props}
 import akka.event.LoggingReceive
@@ -15,20 +16,16 @@ import akka.util.Timeout
 import com.fasterxml.jackson.core.JsonProcessingException
 import com.fasterxml.jackson.databind.{JsonNode, ObjectMapper}
 import com.github.sstone.amqp._
-import com.rabbitmq.client.{RpcClient => _, RpcServer => _, _}
 import com.rabbitmq.client.AMQP.BasicProperties
 import com.rabbitmq.client.impl.recovery.TopologyRecoveryRetryHandlerBuilder
+import com.rabbitmq.client.{RpcClient ⇒ _, RpcServer ⇒ _, _}
+import com.sbuslab.model._
+import com.sbuslab.sbus.auth.AuthProvider
+import com.sbuslab.sbus.{Context, Headers, Transport}
 import com.typesafe.config.Config
 import com.typesafe.scalalogging.Logger
-import org.slf4j.{LoggerFactory, MDC}
 import javax.net.ssl.{SSLContext, TrustManagerFactory}
-import java.io.FileInputStream
-import java.security.KeyStore
-
-import com.sbuslab.model._
-import com.sbuslab.model.scheduler.ScheduleCommand
-import com.sbuslab.sbus.{Context, Headers, Transport}
-import com.sbuslab.sbus.auth.AuthProvider
+import org.slf4j.{LoggerFactory, MDC}
 
 
 class RabbitMqTransport(conf: Config, authProvider: AuthProvider, actorSystem: ActorSystem, mapper: ObjectMapper) extends Transport {
