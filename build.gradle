@@ -76,6 +76,15 @@ publishing {
             }
         }
     }
+    repositories {
+      mavenLocal()
+        ivy {
+            url "https://art.turbofy.net/artifactory/ivy-virtual-proxy"
+        }
+        maven {
+            url "https://art.turbofy.net/artifactory/maven-virtual-proxy"
+        }
+    }
 //    repositories {
 //        maven {
 //            def releasesRepoUrl = "https://oss.sonatype.org/service/local/staging/deploy/maven2"
