@@ -3,6 +3,12 @@ buildscript {
     maven {
       url "https://plugins.gradle.org/m2/"
     }
+    ivy {
+        url "https://art.turbofy.net/artifactory/ivy-virtual-proxy"
+    }
+    maven {
+        url "https://art.turbofy.net/artifactory/maven-virtual-proxy"
+    }
   }
 }
 
@@ -19,6 +25,12 @@ group 'com.sbuslab'
 repositories {
     maven { url 'https://oss.sonatype.org/content/repositories/public' }
     mavenCentral()
+    ivy {
+        url "https://art.turbofy.net/artifactory/ivy-virtual-proxy"
+    }
+    maven {
+        url "https://art.turbofy.net/artifactory/maven-virtual-proxy"
+    }
 }
 
 if (this.parent == null) {
@@ -74,15 +86,6 @@ publishing {
                     developerConnection = 'scm:git@github.com:sbuslab/sbus.git'
                 }
             }
-        }
-    }
-    repositories {
-      mavenLocal()
-        ivy {
-            url "https://art.turbofy.net/artifactory/ivy-virtual-proxy"
-        }
-        maven {
-            url "https://art.turbofy.net/artifactory/maven-virtual-proxy"
         }
     }
 //    repositories {
