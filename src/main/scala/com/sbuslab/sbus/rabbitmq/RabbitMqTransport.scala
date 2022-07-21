@@ -61,20 +61,24 @@ class RabbitMqTransport(conf: Config, authProvider: AuthProvider, actorSystem: A
         cf.setTopologyRecoveryEnabled(true)
 
         if (conf.getBoolean("ssl.enabled")) {
-          val tks = KeyStore.getInstance("JKS")
+          if (conf.hasPath("ssl.truststore")) {
+            val tks = KeyStore.getInstance("JKS")
 
-        tks.load(new FileInputStream(
-          conf.getString("ssl.truststore.certs-path")),
-            conf.getString("ssl.truststore.password").toCharArray
-          )
+            tks.load(new FileInputStream(
+              conf.getString("ssl.truststore.certs-path")),
+                conf.getString("ssl.truststore.password").toCharArray
+              )
 
-          val tmf = TrustManagerFactory.getInstance("SunX509")
-          tmf.init(tks)
+            val tmf = TrustManagerFactory.getInstance("SunX509")
+            tmf.init(tks)
 
-          val sslContext = SSLContext.getInstance("TLSv1.2")
-          sslContext.init(null, tmf.getTrustManagers, null)
+            val sslContext = SSLContext.getInstance("TLSv1.2")
+            sslContext.init(null, tmf.getTrustManagers, null)
 
-          cf.useSslProtocol(sslContext)
+            cf.useSslProtocol(sslContext)
+          } else {
+            cf.useSslProtocol()
+          }
         }
 
         cf.setTopologyRecoveryRetryHandler(TopologyRecoveryRetryHandlerBuilder.builder()
